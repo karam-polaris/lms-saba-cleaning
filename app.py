@@ -564,21 +564,23 @@ BUNDLED_DEMO = ROOT / "demo" / "demo_snapshot.json"
 
 def _restore_snapshot_types(df: pd.DataFrame) -> pd.DataFrame:
     """Cast columns that were stringified back to their proper types."""
-    bool_cols = [c for c in df.columns if c.startswith("_is_") or c.startswith("_eightfold")]
-    for col in bool_cols:
-        if col in df.columns:
-            df[col] = df[col].map(lambda v: str(v).strip().lower() == "true")
+    for col in df.columns:
+        sample = df[col].dropna().astype(str).str.strip().str.lower()
+        unique = set(sample.unique()) - {"nan", "none", ""}
 
-    float_cols = ["_ai_description_confidence", "_scope_confidence", "_sunset_score"]
-    for col in float_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+        # Auto-detect boolean columns: only contain true/false
+        if unique and unique <= {"true", "false"}:
+            df[col] = sample.map({"true": True, "false": False, "nan": False,
+                                  "none": False, "": False})
+            continue
 
-    int_cols = ["_ai_description_tokens", "FY24 Completions", "FY25 Completions",
-                "FY26 Completions", "FY26 Enrollments", "Learning Hours"]
-    for col in int_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
+        # Numeric columns
+        numeric = pd.to_numeric(df[col], errors="coerce")
+        if numeric.notna().sum() > len(df) * 0.5:
+            if (numeric.dropna() % 1 == 0).all():
+                df[col] = numeric.fillna(0).astype(int)
+            else:
+                df[col] = numeric.fillna(0.0)
 
     return df
 
