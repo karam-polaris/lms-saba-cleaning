@@ -565,16 +565,19 @@ BUNDLED_DEMO = ROOT / "demo" / "demo_snapshot.json"
 def _restore_snapshot_types(df: pd.DataFrame) -> pd.DataFrame:
     """Cast columns that were stringified back to their proper types."""
     for col in df.columns:
-        sample = df[col].dropna().astype(str).str.strip().str.lower()
-        unique = set(sample.unique()) - {"nan", "none", ""}
-
-        # Auto-detect boolean columns: only contain true/false
-        if unique and unique <= {"true", "false"}:
-            df[col] = sample.map({"true": True, "false": False, "nan": False,
-                                  "none": False, "": False})
+        if df[col].dtype != object:
             continue
 
-        # Numeric columns
+        # Work on the full column (no dropna — avoids index misalignment)
+        lowered = df[col].astype(str).str.strip().str.lower()
+        unique_vals = set(lowered.unique()) - {"nan", "none", ""}
+
+        # Boolean: only "true" / "false" values present
+        if unique_vals and unique_vals <= {"true", "false"}:
+            df[col] = (lowered == "true")
+            continue
+
+        # Numeric: try to parse; only replace if >50% success
         numeric = pd.to_numeric(df[col], errors="coerce")
         if numeric.notna().sum() > len(df) * 0.5:
             if (numeric.dropna() % 1 == 0).all():
