@@ -562,6 +562,27 @@ def run_pipeline_with_progress(xlsx_path: str, ai_enabled: bool,
 # Keep cache wrapper for demo mode (pre-baked results)
 BUNDLED_DEMO = ROOT / "demo" / "demo_snapshot.json"
 
+def _restore_snapshot_types(df: pd.DataFrame) -> pd.DataFrame:
+    """Cast columns that were stringified back to their proper types."""
+    bool_cols = [c for c in df.columns if c.startswith("_is_") or c.startswith("_eightfold")]
+    for col in bool_cols:
+        if col in df.columns:
+            df[col] = df[col].map(lambda v: str(v).strip().lower() == "true")
+
+    float_cols = ["_ai_description_confidence", "_scope_confidence", "_sunset_score"]
+    for col in float_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+
+    int_cols = ["_ai_description_tokens", "FY24 Completions", "FY25 Completions",
+                "FY26 Completions", "FY26 Enrollments", "Learning Hours"]
+    for col in int_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
+
+    return df
+
+
 @st.cache_data(show_spinner=False)
 def _load_demo_results() -> tuple[pd.DataFrame, dict, dict] | None:
     # prefer a freshly-saved snapshot; fall back to the bundled one
@@ -571,7 +592,7 @@ def _load_demo_results() -> tuple[pd.DataFrame, dict, dict] | None:
     if not demo_file.exists():
         return None
     data = json.loads(demo_file.read_text(encoding="utf-8"))
-    df = pd.DataFrame(data["rows"])
+    df = _restore_snapshot_types(pd.DataFrame(data["rows"]))
     return df, data["queue_summary"], data["quality"]
 
 
