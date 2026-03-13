@@ -1,0 +1,11 @@
+{
+  "placeholder_words": ["PRUEBA", "TEST", "DRAFT", "TBD", "XXX", "PLACEHOLDER", "SAMPLE", "DEMO"],
+  "version_noise_suffixes": ["v1", "v2", "v3", "final", "new", "copy", "_copy"],
+  "protected_acronyms": ["CPE", "IFRS", "ESG", "RPM", "IT", "AI", "ISA", "PSAS", "GLAS",
+    "JET", "CPA", "CFA", "GST", "VAT", "API", "GDPR", "PCAOB", "PRIV", "PUB",
+    "HR", "L&D", "KPI", "MF", "ERP", "AML", "FCPA", "OECD", "ISSB", "TCFD"],
+  "exceptions": [
+    {"pattern": "–", "action": "preserve", "note": "En dash in Deloitte bilingual titles is intentional"},
+    {"pattern": "tod@s", "action": "preserve", "note": "Inclusive Spanish spelling is intentional branding"}
+  ]
+}

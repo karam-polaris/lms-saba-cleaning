@@ -1,0 +1,24 @@
+{
+  "_note": "Update url_template with IT-confirmed Saba deep-link pattern before running EightfoldExporter",
+  "url_template": "https://SABA_HOST_TBD/sabacloud/learning/type,OLR_CLASS_-{course_id}/id,{course_id}",
+  "default_images": {
+    "Audit/A&A": "",
+    "Tax": "",
+    "Consulting": "",
+    "Advisory": "",
+    "Enabling Areas": "",
+    "Cross-LoS": "",
+    "Unknown": ""
+  },
+  "currency_map": {
+    "Chile": "CLP",
+    "Canada": "CAD",
+    "CA Audit": "CAD",
+    "CA Consulting": "CAD",
+    "CA No Notifications": "CAD",
+    "CA Tax": "CAD",
+    "US": "USD",
+    "UK": "GBP",
+    "Australia": "AUD"
+  }
+}

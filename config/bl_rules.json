@@ -1,0 +1,59 @@
+{
+  "Audit/A&A": {
+    "domains": ["CA Audit", "Audit", "Assurance"],
+    "keywords": [
+      "audit", "assurance", "group audit", "IT audit", "ISA", "PCAOB",
+      "CAS ", "internal audit", "financial statement", "attestation",
+      "SIT110", "TE610", "LEV257", "DO301", "journal entry", "JET",
+      "Levvia", "Omnia", "audit evidence", "audit risk", "engagement quality"
+    ],
+    "classifications": ["Assurance"]
+  },
+  "Tax": {
+    "domains": ["Tax", "CA Tax"],
+    "keywords": [
+      "tax", "GST", "VAT", "HST", "transfer pricing", "pillar two",
+      "income tax", "corporate tax", "indirect tax", "PSAS", "PSAB",
+      "tax compliance", "tax planning", "M&A tax", "R&D tax credit"
+    ],
+    "classifications": ["Tax"]
+  },
+  "Consulting": {
+    "domains": ["CA Consulting", "Consulting"],
+    "keywords": [
+      "consulting", "strategy", "transformation", "change management",
+      "supply chain", "operations", "business process", "ERP",
+      "SAP", "Oracle", "Salesforce", "cloud transformation"
+    ],
+    "classifications": ["Consulting"]
+  },
+  "Advisory": {
+    "domains": ["Advisory", "Financial Advisory"],
+    "keywords": [
+      "advisory", "M&A", "merger", "acquisition", "valuation",
+      "restructuring", "forensic", "litigation", "fraud",
+      "TE715", "fraud in focus", "risk advisory", "cyber", "cybersecurity"
+    ],
+    "classifications": ["Advisory"]
+  },
+  "Enabling Areas": {
+    "domains": [],
+    "keywords": [
+      "HR", "human resources", "people management", "talent", "recruitment",
+      "finance operations", "IT operations", "legal", "marketing",
+      "gestión de personas", "inclusión", "neurodiversidad", "diversity",
+      "inclusion", "accessibility", "wellbeing", "mental health"
+    ],
+    "classifications": ["Leadership & Professional", "Mandatory"]
+  },
+  "Cross-LoS": {
+    "domains": [],
+    "keywords": [
+      "artificial intelligence", "generative AI", "TE605", "TE606",
+      "data analytics", "digital", "innovation", "leadership", "coaching",
+      "RPM", "performance management", "communication", "presentation",
+      "project management", "agile", "resilience", "sustainability"
+    ],
+    "classifications": ["Technical"]
+  }
+}

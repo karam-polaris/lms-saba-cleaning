@@ -1,0 +1,33 @@
+{
+  "Independence": [
+    "independence matters", "independence training", "sec independence",
+    "independence requirements", "CG902", "CG903", "PRIV", "PUB",
+    "personal independence", "financial independence", "objectivity"
+  ],
+  "IFRS_ESG": [
+    "IFRS", "IAS ", "IFRS S1", "IFRS S2", "ESG", "sustainability reporting",
+    "climate disclosure", "climate-related", "SF703", "SF704", "non-financial reporting",
+    "sustainability-related", "ISSB", "TCFD", "scope 3 emissions"
+  ],
+  "PSAS": [
+    "PSAS", "public sector accounting", "PSAS update", "government accounting",
+    "public sector audit", "PS 3400", "PS 2601", "PS 1201"
+  ],
+  "PillarTwo": [
+    "pillar 2", "pillar two", "global minimum tax", "GMT", "GloBE",
+    "OECD tax", "15 percent tax", "qualified domestic minimum top-up tax"
+  ],
+  "AML": [
+    "anti-money laundering", "AML", "proceeds of crime", "PCMLTFA",
+    "FINTRAC", "terrorist financing", "suspicious transaction", "STR"
+  ],
+  "Privacy": [
+    "privacy", "GDPR", "PIPEDA", "data protection", "personal information",
+    "data privacy", "CASL", "privacy legislation", "Law 25"
+  ],
+  "Ethics_Conduct": [
+    "code of conduct", "ethics", "professional conduct", "whistleblower",
+    "conflict of interest", "bribery", "anti-corruption", "FCPA"
+  ],
+  "CPE_Required": []
+}
