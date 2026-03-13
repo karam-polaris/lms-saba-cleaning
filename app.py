@@ -562,42 +562,27 @@ def run_pipeline_with_progress(xlsx_path: str, ai_enabled: bool,
 # Keep cache wrapper for demo mode (pre-baked results)
 BUNDLED_DEMO = ROOT / "demo" / "demo_snapshot.json"
 
-def _restore_snapshot_types(df: pd.DataFrame) -> pd.DataFrame:
-    """Cast columns that were stringified back to their proper types."""
-    for col in df.columns:
-        if df[col].dtype != object:
-            continue
-
-        # Work on the full column (no dropna — avoids index misalignment)
-        lowered = df[col].astype(str).str.strip().str.lower()
-        unique_vals = set(lowered.unique()) - {"nan", "none", ""}
-
-        # Boolean: only "true" / "false" values present
-        if unique_vals and unique_vals <= {"true", "false"}:
-            df[col] = (lowered == "true")
-            continue
-
-        # Numeric: try to parse; only replace if >50% success
-        numeric = pd.to_numeric(df[col], errors="coerce")
-        if numeric.notna().sum() > len(df) * 0.5:
-            if (numeric.dropna() % 1 == 0).all():
-                df[col] = numeric.fillna(0).astype(int)
-            else:
-                df[col] = numeric.fillna(0.0)
-
-    return df
-
-
 @st.cache_data(show_spinner=False)
 def _load_demo_results() -> tuple[pd.DataFrame, dict, dict] | None:
-    # prefer a freshly-saved snapshot; fall back to the bundled one
+    from io import StringIO
     demo_file = OUTPUT_DIR / "demo_snapshot.json"
     if not demo_file.exists():
         demo_file = BUNDLED_DEMO
     if not demo_file.exists():
         return None
     data = json.loads(demo_file.read_text(encoding="utf-8"))
-    df = _restore_snapshot_types(pd.DataFrame(data["rows"]))
+    # New format: rows_json (pandas to_json — preserves real types)
+    if "rows_json" in data:
+        df = pd.read_json(StringIO(data["rows_json"]), orient="records")
+    else:
+        # Legacy string format — force-convert bool columns
+        df = pd.DataFrame(data["rows"])
+        for col in df.columns:
+            if df[col].dtype == object:
+                lowered = df[col].astype(str).str.strip().str.lower()
+                vals = set(lowered.unique()) - {"nan", "none", ""}
+                if vals and vals <= {"true", "false"}:
+                    df[col] = lowered == "true"
     return df, data["queue_summary"], data["quality"]
 
 
@@ -605,7 +590,7 @@ def _save_demo_snapshot(df: pd.DataFrame, qs: dict, quality: dict) -> None:
     """Save current results as a reusable demo snapshot."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     snapshot = {
-        "rows": df.astype(str).to_dict(orient="records"),
+        "rows_json": df.to_json(orient="records", default_handler=str),
         "queue_summary": qs,
         "quality": quality,
     }
