@@ -21,7 +21,7 @@ data/processed/
 data/*.xlsx
 data/*.xls
 data/*.parquet
-demo_snapshot.json
+# demo_snapshot.json  — bundled version in demo/ IS committed; local outputs are not
 
 # OS
 .DS_Store

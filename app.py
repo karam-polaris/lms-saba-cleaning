@@ -560,9 +560,14 @@ def run_pipeline_with_progress(xlsx_path: str, ai_enabled: bool,
 
 
 # Keep cache wrapper for demo mode (pre-baked results)
+BUNDLED_DEMO = ROOT / "demo" / "demo_snapshot.json"
+
 @st.cache_data(show_spinner=False)
 def _load_demo_results() -> tuple[pd.DataFrame, dict, dict] | None:
+    # prefer a freshly-saved snapshot; fall back to the bundled one
     demo_file = OUTPUT_DIR / "demo_snapshot.json"
+    if not demo_file.exists():
+        demo_file = BUNDLED_DEMO
     if not demo_file.exists():
         return None
     data = json.loads(demo_file.read_text(encoding="utf-8"))
@@ -652,7 +657,7 @@ def render_sidebar() -> tuple[bool, str | None, bool, str, str]:
                 xlsx_path = str(POC_DEFAULT)
                 st.caption(f"File: `{POC_DEFAULT.name}`")
             else:
-                st.warning("PoC file not found.")
+                st.info("PoC sample not available in this environment — use Demo mode below to load pre-computed results instantly, or upload your own catalog.")
         else:
             up = st.file_uploader("Upload XLSX", type=["xlsx"], label_visibility="collapsed",
                                   help="Single-row or two-row header supported")
@@ -664,7 +669,7 @@ def render_sidebar() -> tuple[bool, str | None, bool, str, str]:
 
         st.markdown("")
 
-        demo_snap_exists = (OUTPUT_DIR / "demo_snapshot.json").exists()
+        demo_snap_exists = (OUTPUT_DIR / "demo_snapshot.json").exists() or BUNDLED_DEMO.exists()
         demo_mode = st.toggle(
             "Demo mode (load saved results)",
             value=False,
